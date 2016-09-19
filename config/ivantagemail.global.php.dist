@@ -1,0 +1,62 @@
+<?php
+/**
+ * IvantageMail Configuration
+ *
+ * If you have a ./config/autoload/ directory set up for your project, you can
+ * drop this config file in it and change the values as you wish. Be sure to
+ * remove the .dist extension.
+ */
+
+/**
+ * SMTP Configuration
+ *
+ * Configure the transport used for sending messages.
+ */
+$smtpParams = array(
+    'host'  => 'smtp.sendgrid.net',
+    'port'  => '587',
+    'connection_class'  => 'login',
+    'connection_config'  => array(
+		'ssl'	=> 'tls',
+		'username'	=> 'user',
+		'password'	=> 'pass'
+	)
+);
+
+return array(
+    /**
+     * Options used when rendering iVantage email templates
+     */
+    'ivantagemail' => array(
+        'template' => array(
+            'website' => 'www.mywebsite.com',
+            'email' => 'email@mywebsite.com',
+            'telephone' => '555-555-5555',
+            'logo' => 'urlformylogo.png',
+            'company' => 'My company name',
+            'contact_name' => 'The Team'
+        ),
+        'sendgrid' => array(
+            'api_key' => 'MySecretApiKey'
+        ),
+        // Fill in values to prevent emails from being sent unless the address
+        // matches one of the specified domains. If omitted or made empty, by default
+        // all emails will be allowed to send normally. This is mostly useful to set
+        // for non-production environments to prevent emails from being
+        // sent to non-internal users.
+        'allowed_email_domains' => array(
+            'mycompany.com',
+            'foocompany.com'
+        )
+    ),
+    'service_manager' => array(
+        'factories' => array(
+            'Zend\Mail\Transport\Smtp' => function ($sm) use ($smtpParams) {
+				$smtpTransport = new Zend\Mail\Transport\Smtp();
+				$options = new Zend\Mail\Transport\SmtpOptions($smtpParams);
+				$smtpTransport->setOptions($options);
+				return $smtpTransport;
+            },
+        ),
+    ),
+);

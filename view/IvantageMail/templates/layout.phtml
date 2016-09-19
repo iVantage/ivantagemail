@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title><?php echo $this->title; ?></title>
+</head>
+
+<body style="margin-left:10px;margin-right:10px;color:#454545">
+  <div align="left">
+
+    <table border="0" cellpadding="0" width="700">
+      <tbody>
+        <tr>
+          <td>
+
+            <div id="logo" style="border-bottom:1px solid #ccc;padding-bottom:5px;margin-bottom:10px">
+              <img src="<?php echo $this->logo; ?>" align="middle" alt="<?php echo $this->company; ?>" title="<?php echo $this->company; ?> Logo">
+            </div>
+
+            <div id="message" style="padding-top:10px;padding-bottom:10px;font-family: Arial, Helvetica, sans-serif">
+              <?php echo $this->content; ?>
+            </div>
+
+            <div id="footer" style="border-top:1px solid #ccc;padding-top:5px;margin-top:10px;">
+              <table width="100%">
+                <tr>
+                  <td style="font-family: Arial, Helvetica, sans-serif">&copy; <?php echo date('Y')?> <?php echo $this->company; ?></td>
+                  <td style="font-family: Arial, Helvetica, sans-serif" align="right">Visit us: <a href="http://<?php echo $this->website; ?>"><?php echo $this->website; ?></a>, <?php echo $this->telephone; ?></td>
+                </tr>
+              </table>
+            </div>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</body>
+</html>

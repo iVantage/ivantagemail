@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="./tests/bootstrap.php">
+	<php>
+		<server name='HTTP_HOST' value='caml.localhost'/>
+	</php>
+	<testsuites>
+		<testsuite name="IvantageMail tests">
+			<directory>./tests</directory>
+		</testsuite>
+	</testsuites>
+    <filter>
+        <blacklist>
+            <directory>./config</directory>
+            <directory>./tests</directory>
+            <directory>./vendor</directory>
+            <directory>./src</directory>
+        </blacklist>
+        <whitelist>
+            <directory>./src/IvantageMail</directory>
+        </whitelist>
+    </filter>
+</phpunit>
