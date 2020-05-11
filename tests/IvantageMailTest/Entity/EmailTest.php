@@ -6,9 +6,9 @@ use IvantageMailTest\Bootstrap;
 use IvantageMail\Entity\Email;
 use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver\TemplatePathStack;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class EmailEntityTest extends PHPUnit_Framework_TestCase {
+class EmailEntityTest extends TestCase {
 
     protected $serviceManager;
     protected $renderer;

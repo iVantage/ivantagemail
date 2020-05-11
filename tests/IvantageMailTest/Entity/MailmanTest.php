@@ -5,9 +5,9 @@ namespace IvantageMailTest\Entity;
 use IvantageMailTest\Bootstrap;
 use IvantageMail\Entity\Mailman;
 use IvantageMail\Entity\Email;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MailmanEntityTest extends PHPUnit_Framework_TestCase {
+class MailmanEntityTest extends TestCase {
 
     public function testEntityCanBeCreated() {
         $serviceManager = Bootstrap::getServiceManager();

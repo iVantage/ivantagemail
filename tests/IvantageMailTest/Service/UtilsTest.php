@@ -3,9 +3,9 @@
 namespace IvantageMailTest\Service;
 
 use IvantageMail\Service\Utils;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class UtilsTest extends PHPUnit_Framework_TestCase {
+class UtilsTest extends TestCase {
 
     public function testEmailMatchesDomain_EmailMatches_ReturnsTrue() {
         $email = 'foo@ivantagehealth.com';

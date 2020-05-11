@@ -45,20 +45,22 @@ class Bootstrap
         } else {
             $config = require __DIR__ . '/TestConfig.php.dist';
         }
-
-        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $_emptyConfig = new ServiceManagerConfig();
+        $emptyConfig = $_emptyConfig->ToArray();
+        $serviceManager = new ServiceManager($emptyConfig);
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
 
         static::$serviceManager = $serviceManager;
         static::$config = $config;
-
     }
 
     public static function getServiceManager()
     {
         return static::$serviceManager;
     }
+
+
 
 }
 
