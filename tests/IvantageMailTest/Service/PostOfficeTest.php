@@ -4,22 +4,34 @@ namespace IvantageMailTest\Service;
 
 use IvantageMailTest\Bootstrap;
 use IvantageMail\Service\PostOffice;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PostOfficeTest extends PHPUnit_Framework_TestCase {
+class PostOfficeTest extends TestCase {
 
-    protected $serviceManager;
 
     protected function setUp()
     {
-        $this->serviceManager = Bootstrap::getServiceManager();
+        Bootstrap::getServiceManager();
+    }
+
+    public function createPostOffice(){
+
+        $email = new \IvantageMail\Entity\Email();
+        $mailman = new \IvantageMail\Entity\Mailman(
+                new \Zend\Mail\Transport\Smtp());
+        $headers = [];
+        $emailFactory = function() use ($email) {
+            return $email;
+        };
+        $taskFactory = function($email, $mailman, $headers){
+                return new \IvantageMail\Tasks\EmailTask($email, $mailman, $headers);
+        };
+        return new PostOffice($emailFactory, $taskFactory, $mailman);
     }
 
     public function testCreateSendgridHeader()
     {
-        $postOffice = $this->serviceManager
-                ->get('Ivantagemail\Service\PostOffice');
-
+        $postOffice = $this->createPostOffice();
         $to = [
             'dingo@atemybaby.com',
             'lemmetake@pikachu.com'
@@ -30,19 +42,15 @@ class PostOfficeTest extends PHPUnit_Framework_TestCase {
             '-fave-food-' => ['babies', 'berries']
         ];
         $category =['wah'];
-
         $headers = $postOffice->createSendgridHeader($to,
                 $templateId,
                 $substitutions,
                 $category);
-
         $this->assertArrayHasKey('X-SMTPAPI', $headers,
                 'It should have an X-SMTPAPI header');
-
         $smtpApi = $headers['X-SMTPAPI'];
         $this->assertTrue(is_string($smtpApi),
                 'The header value should be a string');
-
         $apiOptions = json_decode($smtpApi, true);
         $this->assertEquals($to, $apiOptions['to'],
                 'It should have a "to" value');
@@ -64,8 +72,7 @@ class PostOfficeTest extends PHPUnit_Framework_TestCase {
 
     public function testGetEmail()
     {
-        $postOffice = $this->serviceManager
-                ->get('Ivantagemail\Service\PostOffice');
+        $postOffice = $this->createPostOffice();
         $email = $postOffice->getEmail();
         $this->assertInstanceOf('Ivantagemail\Entity\Email', $email,
                 'It should return an instance of the Email class');
@@ -73,8 +80,7 @@ class PostOfficeTest extends PHPUnit_Framework_TestCase {
 
     public function testGetEmailTask()
     {
-        $postOffice = $this->serviceManager
-                ->get('Ivantagemail\Service\PostOffice');
+        $postOffice = $this->createPostOffice();
         $email = new \IvantageMail\Entity\Email();
         $mailman = new \IvantageMail\Entity\Mailman(
                 new \Zend\Mail\Transport\Smtp());
@@ -103,11 +109,9 @@ class PostOfficeTest extends PHPUnit_Framework_TestCase {
         $mockEmail->expects($this->once())
                 ->method('setBody')
                 ->willReturn($mockEmail);
-
         $emailFactory = function() use ($mockEmail) {
             return $mockEmail;
         };
-
         $mockTask = $this->getMockBuilder('IvantageMail\Tasks\EmailTask')
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -118,11 +122,9 @@ class PostOfficeTest extends PHPUnit_Framework_TestCase {
                 use ($mockTask) {
             return $mockTask;
         };
-
         $mailman = $this->getMockBuilder('IvantageMail\Entity\Mailman')
                 ->disableOriginalConstructor()
                 ->getMock();
-
         $postOffice = new PostOffice($emailFactory, $taskFactory, $mailman);
         $from = 'foo@bar.com';
         $to = 'dingo@atemybaby.com';
