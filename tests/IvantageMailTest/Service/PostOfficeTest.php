@@ -8,12 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class PostOfficeTest extends TestCase {
 
-
-    protected function setUp()
-    {
-        Bootstrap::getServiceManager();
-    }
-
     public function createPostOffice(){
 
         $email = new \IvantageMail\Entity\Email();
@@ -24,7 +18,7 @@ class PostOfficeTest extends TestCase {
             return $email;
         };
         $taskFactory = function($email, $mailman, $headers){
-                return new \IvantageMail\Tasks\EmailTask($email, $mailman, $headers);
+            return new \IvantageMail\Tasks\EmailTask($email, $mailman, $headers);
         };
         return new PostOffice($emailFactory, $taskFactory, $mailman);
     }

@@ -8,9 +8,10 @@
   ],
   "homepage": "http://ivantagehealth.com/",
   "require": {
+    "php": ">=5.3.3",
     "zendframework/zend-component-installer": "^1.1",
     "zendframework/zendframework": "^3.0.0",
-    "doctrine/doctrine-orm-module": "^1.1",
+    "doctrine/doctrine-orm-module": "1.1.5",
     "ivantage/ivantagejobqueue": "^2.0"
   },
   "require-dev": {

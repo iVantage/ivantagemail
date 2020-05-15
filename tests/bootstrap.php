@@ -45,9 +45,8 @@ class Bootstrap
         } else {
             $config = require __DIR__ . '/TestConfig.php.dist';
         }
-        $_emptyConfig = new ServiceManagerConfig();
-        $emptyConfig = $_emptyConfig->ToArray();
-        $serviceManager = new ServiceManager($emptyConfig);
+        $emptyConfig = new ServiceManagerConfig();
+        $serviceManager = new ServiceManager($emptyConfig->ToArray());
         $serviceManager->setService('ApplicationConfig', $config);
         $serviceManager->get('ModuleManager')->loadModules();
 
