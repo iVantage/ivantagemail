@@ -52,7 +52,7 @@ class PostOffice
 
         $emailTask = $this->getEmailTask($email, $this->mailman, $headers);
         $jobId = $emailTask->execute(
-            'http://' . $_SERVER['HTTP_HOST'] . '/jobqueue');
+            'https://' . $_SERVER['HTTP_HOST'] . '/jobqueue');
         return $jobId;
     }
 
