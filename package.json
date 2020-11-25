@@ -1,13 +1,9 @@
 {
   "name": "ivantagemail",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "devDependencies": {
     "grunt": "~0.4.4",
     "grunt-phpunit": "~0.3.3",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-svn-bump": "~0.2.1",
-    "grunt-svn-tag": "~0.5.1",
-    "grunt-ivantage-svn-changelog": "~0.4.1",
-    "grunt-ivantage-svn-release": "git://github.com/iVantage/grunt-ivantage-svn-release"
+    "grunt-contrib-watch": "~0.6.1"
   }
 }
