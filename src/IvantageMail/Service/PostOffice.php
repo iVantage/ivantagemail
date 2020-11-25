@@ -10,6 +10,11 @@
  */
 namespace IvantageMail\Service;
 
+use IvantageMail\Tasks\TransactionalTemplateEmailTask;
+use \SendGrid\Mail\From;
+use \SendGrid\Mail\To;
+use \SendGrid\Mail\Mail;
+
 class PostOffice
 {
 
@@ -19,11 +24,14 @@ class PostOffice
 
     protected $mailman;
 
-    public function __construct($emailFactory, $emailTaskFactory, $mailman)
+    protected $apiKey;
+
+    public function __construct($emailFactory, $emailTaskFactory, $mailman, $apiKey)
     {
         $this->emailFactory = $emailFactory;
         $this->emailTaskFactory = $emailTaskFactory;
         $this->mailman = $mailman;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -53,6 +61,31 @@ class PostOffice
         $emailTask = $this->getEmailTask($email, $this->mailman, $headers);
         $jobId = $emailTask->execute(
             'http://' . $_SERVER['HTTP_HOST'] . '/jobqueue');
+        return $jobId;
+    }
+
+    public function sendLegacyTransactionalEmail($fromAddress, array $toAddresses, $subject,
+                                                 $templateId, array $toNames = null,
+                                                 array $toSubstitutions = null)
+    {
+        if(!is_null($toNames) && count($toAddresses) !== count($toNames)) {
+            throw new \Exception("Recipient email address and name arrays must be of equal length");
+        }
+        if(!is_null($toNames) && count($toAddresses) !== count($toSubstitutions)) {
+            throw new \Exception("Recipient email address and substitution arrays must be of equal length");
+        }
+
+        $from = new From($fromAddress);
+        $tos = array_map(function ($to, $name, $subs) {
+            return new To($to, $name, $subs);
+        }, $toAddresses, $toNames, $toSubstitutions);
+
+        $email = new Mail($from, $tos);
+        $email->setSubject($subject);
+        $email->setTemplateId($templateId);
+
+        $emailTask = new TransactionalTemplateEmailTask($email, $this->apiKey);
+        $jobId = $emailTask->execute('http://' . $_SERVER['HTTP_HOST'] . '/jobqueue');
         return $jobId;
     }
 

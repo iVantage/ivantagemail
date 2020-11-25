@@ -146,11 +146,13 @@ return array(
                 $emailFactory = $sm->get('EmailFactory');
                 $emailTaskFactory = $sm->get('EmailTaskFactory');
                 $mailman = $sm->get('IvantageMail\Entity\Mailman');
+                $apiKey = $sm->get('config')['ivantagemail']['sendgrid']['api_key'];
 
                 return new \IvantageMail\Service\PostOffice(
                     $emailFactory,
                     $emailTaskFactory,
-                    $mailman
+                    $mailman,
+                    $apiKey
                 );
             },
             'IvantageMail\Service\SendGrid' => function($sm) {
