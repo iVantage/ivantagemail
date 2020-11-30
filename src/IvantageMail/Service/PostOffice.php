@@ -10,7 +10,6 @@
  */
 namespace IvantageMail\Service;
 
-use IvantageMail\Tasks\TransactionalTemplateEmailTask;
 use \SendGrid\Mail\From;
 use \SendGrid\Mail\To;
 use \SendGrid\Mail\Mail;
