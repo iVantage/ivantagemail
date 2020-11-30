@@ -72,8 +72,10 @@ class PostOffice
      * @param array $toAddresses List of recipient email addresses.
      * @param string $subject Email subject
      * @param string $templateId The ID of the Sendgrid legacy/transactional template
-     * @param array|null $toNames List of recipient names
-     * @param array|null $toSubstitutions List of template substitutions for the recipients
+     * @param array|null $toNames List of recipient names. Array indexes should align with the intended recipients
+     *                            in $fromAddresses.
+     * @param array|null $toSubstitutions List of template substitutions for the recipients. Array indexes should
+     *                                    align with the intended recipients in $fromAddresses.
      * @param array $categories Optional categories to apply to the message.
      * @return \SendGrid\Response
      * @throws \SendGrid\Mail\TypeException
