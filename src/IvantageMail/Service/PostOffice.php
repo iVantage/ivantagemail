@@ -74,12 +74,13 @@ class PostOffice
      * @param string $templateId The ID of the Sendgrid legacy/transactional template
      * @param array|null $toNames List of recipient names
      * @param array|null $toSubstitutions List of template substitutions for the recipients
+     * @param array $categories Optional categories to apply to the message.
      * @return \SendGrid\Response
      * @throws \SendGrid\Mail\TypeException
      */
     public function sendBulkTemplateEmail($fromAddress, array $toAddresses, $subject,
                                           $templateId, array $toNames = null,
-                                          array $toSubstitutions = null)
+                                          array $toSubstitutions = null, array $categories = [])
     {
         if(!is_null($toNames) && count($toAddresses) !== count($toNames)) {
             throw new \InvalidArgumentException("Recipient email address and name arrays must be of equal length");
@@ -109,6 +110,9 @@ class PostOffice
 
         $email = new Mail($from, $tos, $subject);
         $email->setTemplateId($templateId);
+        if(!empty($categories)) {
+            $email->addCategories($categories);
+        }
 
         $sendgrid = new \SendGrid($this->apiKey);
         return $sendgrid->send($email);
