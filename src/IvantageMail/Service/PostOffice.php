@@ -64,29 +64,54 @@ class PostOffice
         return $jobId;
     }
 
-    public function sendLegacyTransactionalEmail($fromAddress, array $toAddresses, $subject,
-                                                 $templateId, array $toNames = null,
-                                                 array $toSubstitutions = null)
+    /**
+     * Sends a SendGrid template email to one or more recipients. Sending messages
+     * in this way bypasses the Zend Server job queue to avoid message size restrictions.
+     *
+     * @param string $fromAddress Email address of the sender
+     * @param array $toAddresses List of recipient email addresses.
+     * @param string $subject Email subject
+     * @param string $templateId The ID of the Sendgrid legacy/transactional template
+     * @param array|null $toNames List of recipient names
+     * @param array|null $toSubstitutions List of template substitutions for the recipients
+     * @return \SendGrid\Response
+     * @throws \SendGrid\Mail\TypeException
+     */
+    public function sendBulkTemplateEmail($fromAddress, array $toAddresses, $subject,
+                                          $templateId, array $toNames = null,
+                                          array $toSubstitutions = null)
     {
         if(!is_null($toNames) && count($toAddresses) !== count($toNames)) {
-            throw new \Exception("Recipient email address and name arrays must be of equal length");
+            throw new \InvalidArgumentException("Recipient email address and name arrays must be of equal length");
         }
-        if(!is_null($toNames) && count($toAddresses) !== count($toSubstitutions)) {
-            throw new \Exception("Recipient email address and substitution arrays must be of equal length");
+        if(!is_null($toSubstitutions) && count($toAddresses) !== count($toSubstitutions)) {
+            throw new \InvalidArgumentException("Recipient email address and substitution arrays must be of equal length");
+        }
+
+        if(is_null($toNames)) {
+            $toNames = [];
+        }
+        if(is_null($toSubstitutions)) {
+            $toSubstitutions = [];
         }
 
         $from = new From($fromAddress);
         $tos = array_map(function ($to, $name, $subs) {
-            return new To($to, $name, $subs);
+            $to = new To($to);
+            if(!empty($name)) {
+                $to->setName($name);
+            }
+            if(!empty($subs)) {
+                $to->setSubstitutions($subs);
+            }
+            return $to;
         }, $toAddresses, $toNames, $toSubstitutions);
 
-        $email = new Mail($from, $tos);
-        $email->setSubject($subject);
+        $email = new Mail($from, $tos, $subject);
         $email->setTemplateId($templateId);
 
-        $emailTask = new TransactionalTemplateEmailTask($email, $this->apiKey);
-        $jobId = $emailTask->execute('http://' . $_SERVER['HTTP_HOST'] . '/jobqueue');
-        return $jobId;
+        $sendgrid = new \SendGrid($this->apiKey);
+        return $sendgrid->send($email);
     }
 
     /**
