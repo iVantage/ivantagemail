@@ -10,6 +10,10 @@
  */
 namespace IvantageMail\Service;
 
+use \SendGrid\Mail\From;
+use \SendGrid\Mail\To;
+use \SendGrid\Mail\Mail;
+
 class PostOffice
 {
 
@@ -19,11 +23,14 @@ class PostOffice
 
     protected $mailman;
 
-    public function __construct($emailFactory, $emailTaskFactory, $mailman)
+    protected $apiKey;
+
+    public function __construct($emailFactory, $emailTaskFactory, $mailman, $apiKey)
     {
         $this->emailFactory = $emailFactory;
         $this->emailTaskFactory = $emailTaskFactory;
         $this->mailman = $mailman;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -54,6 +61,62 @@ class PostOffice
         $jobId = $emailTask->execute(
             'https://' . $_SERVER['HTTP_HOST'] . '/jobqueue');
         return $jobId;
+    }
+
+    /**
+     * Sends a SendGrid template email to one or more recipients. Sending messages
+     * in this way bypasses the Zend Server job queue to avoid message size restrictions.
+     *
+     * @param string $fromAddress Email address of the sender
+     * @param array $toAddresses List of recipient email addresses.
+     * @param string $subject Email subject
+     * @param string $templateId The ID of the Sendgrid legacy/transactional template
+     * @param array|null $toNames List of recipient names. Array indexes should align with the intended recipients
+     *                            in $fromAddresses.
+     * @param array|null $toSubstitutions List of template substitutions for the recipients. Array indexes should
+     *                                    align with the intended recipients in $fromAddresses.
+     * @param array $categories Optional categories to apply to the message.
+     * @return \SendGrid\Response
+     * @throws \SendGrid\Mail\TypeException
+     */
+    public function sendBulkTemplateEmail($fromAddress, array $toAddresses, $subject,
+                                          $templateId, array $toNames = null,
+                                          array $toSubstitutions = null, array $categories = [])
+    {
+        if(!is_null($toNames) && count($toAddresses) !== count($toNames)) {
+            throw new \InvalidArgumentException("Recipient email address and name arrays must be of equal length");
+        }
+        if(!is_null($toSubstitutions) && count($toAddresses) !== count($toSubstitutions)) {
+            throw new \InvalidArgumentException("Recipient email address and substitution arrays must be of equal length");
+        }
+
+        if(is_null($toNames)) {
+            $toNames = [];
+        }
+        if(is_null($toSubstitutions)) {
+            $toSubstitutions = [];
+        }
+
+        $from = new From($fromAddress);
+        $tos = array_map(function ($to, $name, $subs) {
+            $to = new To($to);
+            if(!empty($name)) {
+                $to->setName($name);
+            }
+            if(!empty($subs)) {
+                $to->setSubstitutions($subs);
+            }
+            return $to;
+        }, $toAddresses, $toNames, $toSubstitutions);
+
+        $email = new Mail($from, $tos, $subject);
+        $email->setTemplateId($templateId);
+        if(!empty($categories)) {
+            $email->addCategories($categories);
+        }
+
+        $sendgrid = new \SendGrid($this->apiKey);
+        return $sendgrid->send($email);
     }
 
     /**

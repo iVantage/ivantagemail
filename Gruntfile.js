@@ -45,7 +45,6 @@ module.exports = function(grunt) {
   // ---------------------------------------------
   grunt.loadNpmTasks('grunt-phpunit');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-ivantage-svn-release');
 
   // ---------------------------------------------
   // Register tasks
