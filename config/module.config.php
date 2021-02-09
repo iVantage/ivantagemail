@@ -1,9 +1,9 @@
 <?php
 
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\View\Renderer\PhpRenderer;
 use IvantageMail\Entity\Email;
-use Zend\Db\Adapter\Adapter;
-use Zend\Http\Client;
+use Laminas\Db\Adapter\Adapter;
+use Laminas\Http\Client;
 
 return array(
     'doctrine' => array(
@@ -108,7 +108,7 @@ return array(
              * Mailman
              * -------------------------------------------------- */
             'IvantageMail\Entity\Mailman' => function($sm) {
-                $transport = $sm->get('Zend\Mail\Transport\Smtp');
+                $transport = $sm->get('Laminas\Mail\Transport\Smtp');
                 $allowedEmailDomains = array();
                 $config = $sm->get('config')['ivantagemail'];
                 if(isset($config['allowed_email_domains'])) {
@@ -157,7 +157,7 @@ return array(
             },
             'IvantageMail\Service\SendGrid' => function($sm) {
                 $client = new Client();
-                $curlAdapter = new \Zend\Http\Client\Adapter\Curl();
+                $curlAdapter = new \Laminas\Http\Client\Adapter\Curl();
                 $env = getenv('APPLICATION_ENV');
                 if($env !== 'production') {
                     $curlAdapter->setOptions(array(

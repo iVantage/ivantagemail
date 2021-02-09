@@ -1,7 +1,7 @@
 <?php
 
-use Zend\View\Resolver\TemplatePathStack;
-use Zend\View\Renderer\PhpRenderer;
+use Laminas\View\Resolver\TemplatePathStack;
+use Laminas\View\Renderer\PhpRenderer;
 
 return array(
     'ivantagemail' => array(
@@ -26,8 +26,8 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Zend\Mail\Transport\Smtp' => function ($sm) {
-                $smtpTransport = new Zend\Mail\Transport\Smtp();
+            'Laminas\Mail\Transport\Smtp' => function ($sm) {
+                $smtpTransport = new Laminas\Mail\Transport\Smtp();
                 return $smtpTransport;
             },
             'ViewRenderer' => function($sm) {

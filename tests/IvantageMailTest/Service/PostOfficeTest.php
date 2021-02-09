@@ -12,7 +12,7 @@ class PostOfficeTest extends TestCase {
 
         $email = new \IvantageMail\Entity\Email();
         $mailman = new \IvantageMail\Entity\Mailman(
-                new \Zend\Mail\Transport\Smtp());
+                new \Laminas\Mail\Transport\Smtp());
         $headers = [];
         $emailFactory = function() use ($email) {
             return $email;
@@ -77,7 +77,7 @@ class PostOfficeTest extends TestCase {
         $postOffice = $this->createPostOffice();
         $email = new \IvantageMail\Entity\Email();
         $mailman = new \IvantageMail\Entity\Mailman(
-                new \Zend\Mail\Transport\Smtp());
+                new \Laminas\Mail\Transport\Smtp());
         $headers = [];
         $emailTask = $postOffice->getEmailTask($email, $mailman, $headers);
         $this->assertInstanceOf('IvantageMail\Tasks\EmailTask', $emailTask,

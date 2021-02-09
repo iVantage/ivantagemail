@@ -15,9 +15,9 @@ use IvantageJobQueue\Tasks\AbstractJobQueueTask;
 use IvantageMail\Entity\Email;
 use IvantageMail\Entity\Mailman;
 
-use Zend\Http\Client;
-use Zend\Http\Request;
-use Zend\Http\Response;
+use Laminas\Http\Client;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 
 class PollEmailQueueTask extends AbstractJobQueueTask {
 

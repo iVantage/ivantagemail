@@ -4,8 +4,8 @@ namespace IvantageMailTest\Entity;
 
 use IvantageMailTest\Bootstrap;
 use IvantageMail\Entity\Email;
-use Zend\View\Renderer\PhpRenderer;
-use Zend\View\Resolver\TemplatePathStack;
+use Laminas\View\Renderer\PhpRenderer;
+use Laminas\View\Resolver\TemplatePathStack;
 use PHPUnit\Framework\TestCase;
 
 class EmailEntityTest extends TestCase {
@@ -62,7 +62,7 @@ class EmailEntityTest extends TestCase {
     public function testToMessage() {
         $message = $this->testEmail->toMessage();
 
-        $this->assertInstanceOf('Zend\Mail\Message', $message);
+        $this->assertInstanceOf('Laminas\Mail\Message', $message);
     }
 
     public function testRenderBody() {

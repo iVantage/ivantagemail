@@ -51,9 +51,9 @@ return array(
     ),
     'service_manager' => array(
         'factories' => array(
-            'Zend\Mail\Transport\Smtp' => function ($sm) use ($smtpParams) {
-				$smtpTransport = new Zend\Mail\Transport\Smtp();
-				$options = new Zend\Mail\Transport\SmtpOptions($smtpParams);
+            'Laminas\Mail\Transport\Smtp' => function ($sm) use ($smtpParams) {
+				$smtpTransport = new Laminas\Mail\Transport\Smtp();
+				$options = new Laminas\Mail\Transport\SmtpOptions($smtpParams);
 				$smtpTransport->setOptions($options);
 				return $smtpTransport;
             },

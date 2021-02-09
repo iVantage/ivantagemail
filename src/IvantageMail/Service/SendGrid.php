@@ -2,7 +2,7 @@
 
 namespace IvantageMail\Service;
 
-use Zend\Http\Client;
+use Laminas\Http\Client;
 
 /**
  * Service for interacting with the SendGrid API

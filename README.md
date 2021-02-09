@@ -1,2 +1,3 @@
 # ivantagemail
-A ZF3 module for sending templated emails using the Zend Server Job Queue
+A Laminas module for sending templated emails, either with the Zend Server Job Queue or in
+bulk using the Sendgrid API.

@@ -10,9 +10,9 @@
  */
 namespace IvantageMail\Entity;
 
-use Zend\Mail\Transport;
-use Zend\Mail\Transport\Smtp as SmtpTransport;
-use Zend\Mail\Message;
+use Laminas\Mail\Transport;
+use Laminas\Mail\Transport\Smtp as SmtpTransport;
+use Laminas\Mail\Message;
 
 use IvantageMail\Entity\Email;
 use IvantageMail\Service\Utils;
@@ -24,7 +24,7 @@ class Mailman {
 
     /**
      * Constructor
-     * @param Zend\Mail\Transport\Smtp $transport
+     * @param Laminas\Mail\Transport\Smtp $transport
      */
     function __construct(SmtpTransport $transport, $allowedEmailDomains = array()) {
         $this->setTransport($transport);
@@ -32,7 +32,7 @@ class Mailman {
     }
 
     /**
-     * @return Zend\Mail\Transport The transport used to send messages.
+     * @return Laminas\Mail\Transport The transport used to send messages.
      */
     public function getTransport() {
         return $this->transport;
@@ -67,7 +67,7 @@ class Mailman {
             $email->setTo($toEmails);
         }
 
-        // Convert the email to a Zend\Mail\Message, which the transport
+        // Convert the email to a Laminas\Mail\Message, which the transport
         // is capable of sending.
         $message = $email->toMessage();
 

@@ -4,17 +4,17 @@
  * Email
  *
  * In addition to setters and getters it also provides
- * methods for converting into a Zend\Mail\Message object, and
+ * methods for converting into a Laminas\Mail\Message object, and
  * for creating the email body by rendering a template.
  *
  * @author Evan
  */
 namespace IvantageMail\Entity;
 
-use Zend\Mail\Message;
-use Zend\Mime\Part as MimePart;
-use Zend\Mime\Message as MimeMessage;
-use Zend\View\Model\ViewModel;
+use Laminas\Mail\Message;
+use Laminas\Mime\Part as MimePart;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\View\Model\ViewModel;
 
 class Email implements EmailInterface {
 
@@ -62,7 +62,7 @@ class Email implements EmailInterface {
      * Upon creation, all emails should have their
      * status set to 'queued'.
      *
-     * @param {Zend\View\Renderer} $renderer Used to render message body from templates
+     * @param {Laminas\View\Renderer} $renderer Used to render message body from templates
      */
     public function __construct($renderer = null, $config = array()) {
         $this->setStatus('queued');
@@ -325,10 +325,10 @@ class Email implements EmailInterface {
 
     /**
      *
-     * Creates a Zend\Mail\Message object out of the info
+     * Creates a Laminas\Mail\Message object out of the info
      * contained in this IvantageMail\Entity\Email object.
      *
-     * @return Zend\Mail\Message $message
+     * @return Laminas\Mail\Message $message
      */
     public function toMessage() {
         $message = new Message();
@@ -358,8 +358,8 @@ class Email implements EmailInterface {
 
                 $at = new MimePart(file_get_contents($path));
                 $at->type = $mimetype;
-                $at->disposition = \Zend\Mime\Mime::DISPOSITION_ATTACHMENT;
-                $at->encoding = \Zend\Mime\Mime::ENCODING_BASE64;
+                $at->disposition = \Laminas\Mime\Mime::DISPOSITION_ATTACHMENT;
+                $at->encoding = \Laminas\Mime\Mime::ENCODING_BASE64;
                 $at->filename = $name;
 
                 $bodyParts->addPart($at);

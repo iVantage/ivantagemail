@@ -17,7 +17,7 @@ class MailmanEntityTest extends TestCase {
     }
 
     public function testSendEmail_RestrictDomains_WontSendMessage() {
-        $mockTransport = $this->getMockBuilder('Zend\Mail\Transport\Smtp')->getMock();
+        $mockTransport = $this->getMockBuilder('Laminas\Mail\Transport\Smtp')->getMock();
         $allowedEmailDomains = array(
             'ivantagehealth.com'
         );
@@ -32,7 +32,7 @@ class MailmanEntityTest extends TestCase {
     }
 
     public function testSendEmail_AllDomainAllowed_WillSendMessage() {
-        $mockTransport = $this->getMockBuilder('Zend\Mail\Transport\Smtp')->getMock();
+        $mockTransport = $this->getMockBuilder('Laminas\Mail\Transport\Smtp')->getMock();
         $allowedEmailDomains = array(
             'ivantagehealth.com'
         );
@@ -41,14 +41,14 @@ class MailmanEntityTest extends TestCase {
 
         $stubEmail = $this->getMockBuilder('IvantageMail\Entity\Email')->getMock();
         $stubEmail->method('getTo')->will($this->returnValue(['foo@ivantagehealth.com']));
-        $stubEmail->method('toMessage')->will($this->returnValue(new \Zend\Mail\Message()));
+        $stubEmail->method('toMessage')->will($this->returnValue(new \Laminas\Mail\Message()));
 
         $mockTransport->expects($this->once())->method('send');
         $mailman->sendEmail($stubEmail);
     }
 
     public function testSendEmail_SomeDomainsAllowed_WillFilterRecipients() {
-        $stubTransport = $this->getMockBuilder('Zend\Mail\Transport\Smtp')->getMock();
+        $stubTransport = $this->getMockBuilder('Laminas\Mail\Transport\Smtp')->getMock();
         $allowedEmailDomains = array(
             'ivantagehealth.com'
         );
@@ -58,7 +58,7 @@ class MailmanEntityTest extends TestCase {
         $mockEmail = $this->getMockBuilder('IvantageMail\Entity\Email')->getMock();
         $mockEmail->method('getTo')
                 ->will($this->returnValue(['foo@ivantagehealth.com', 'foo@bar.com']));
-        $mockEmail->method('toMessage')->will($this->returnValue(new \Zend\Mail\Message()));
+        $mockEmail->method('toMessage')->will($this->returnValue(new \Laminas\Mail\Message()));
 
         $mockEmail->expects($this->once())->method('setTo')
                 ->with(['foo@ivantagehealth.com']);
